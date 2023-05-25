@@ -1,6 +1,17 @@
 const setPrototypeOf=require('setprototypeof')
 var Route = require('./route');
 var Layer = require('./Layer');
+
+const parseUrl=require("parseurl")
+
+// getpathname middleware
+function getPathname(req){
+  try{
+    return parseUrl(req).pathname;
+  }catch(err){
+    return undefined
+  }
+}
 // handles the routing logic.
 const proto=module.exports=function(options){
   const opts=options||{};
@@ -19,7 +30,7 @@ const proto=module.exports=function(options){
   router.stack=[];
 
   return router;
-}
+};
 
 // users may add specific routes into the stack;
 
@@ -51,5 +62,34 @@ proto.handler=function handle(req, res, out){
 proto.handle=function handle(req, res, out){
   const self=this;
   const stack=self.stack;
-  console.log(stack)
+  const path=getPathname(req);
+
+  // find the next matching layer.
+  let layer, match, route;
+  let idx=0;
+
+  while(match!==true && idx<stack.length){
+    layer=stack[idx++];
+
+    match=matchLayer(layer.path);
+    route=layer.route;
+
+    if(match!==true){
+      continue;
+    }
+    if(!route){
+      continue;
+    }
+
+    // handle the request;
+    route.stack[0].handle_request(req, res);
+  }
+}
+
+function matchLayer(layer, path){
+  try{
+    return layer.match(path);
+  }catch(err){
+    return err;
+  }
 }
