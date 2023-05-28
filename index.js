@@ -1,4 +1,4 @@
-let express = require('./src/express')
+let express = require('./src/server')
 const app = express()
 
 app.get('/', (req, res) => {
@@ -20,4 +20,4 @@ app.post('/post',(req,res) => {
     res.end();
 })
 const PORT=3000||undefined
-app.listen(PORT, () => console.log('Example app listening on port'+ PORT))
+app.listen(PORT, () => console.log('Example app listening on port '+ PORT))
