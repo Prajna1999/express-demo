@@ -1,11 +1,11 @@
 const Router=require('../utils/router');
 const router=new Router();
 
-//use get method
-router.get('/', (req, res)=>{
+router.get('/:userId', (req, res)=>{
+    const userId=req.params[0];
     res.statusCode=200;
     res.setHeader('Content-Type', 'text/plain');
-    res.end('Welcome to our mini-express app! \n');
-})
+    res.end(`User ID is ${userId}`);
+});
 
 module.exports=router
