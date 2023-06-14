@@ -1,4 +1,4 @@
-const express = require('./src/server')
+const express = require("./src/express")
 const app = express()
 
 app.get('/', (req, res) => {

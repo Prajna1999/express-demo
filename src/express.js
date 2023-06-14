@@ -12,7 +12,7 @@ function use(fn){
 
 // log middleware:log the request method and URL
 use((req, res, next)=>{
-  console.log( `Recieved ${req.method} request for ${resq.url}`);
+  console.log( `Recieved ${req.method} request for ${req.url}`);
 
   next();
 });
@@ -62,6 +62,4 @@ const server = http.createServer((req, res) => {
     next();
 });
 
-server.listen(3000, '127.0.0.1', () => {
-    console.log('Server running at http://127.0.0.1:3000/');
-});
+module.exports=={server}
