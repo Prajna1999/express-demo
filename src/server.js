@@ -3,6 +3,7 @@ const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
 
 const bodyParser=require('./middleware/bodyParser');
+const cookieParser=require('./middleware/cookieParser');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const Router = require('./utils/router');
@@ -15,6 +16,9 @@ app.use(logger);
 
 //jsonparser middleware
 app.use(bodyParser);
+
+//cookieparser middleware
+app.use(cookieParser);
 
 // Error handling middleware should be added last
 app.use(errorHandler);

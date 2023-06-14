@@ -1,20 +1,20 @@
 module.exports = function(req, res, next) {
-  let data = "";
+  let buf = "";
 
   req.setEncoding('utf8'); // Here we set the encoding
 
   req.on('data', function(chunk) {
-    data += chunk;
+    buf+= chunk;
   });
 
   req.on('end', function() {
-    req.rawBody = data;
-    console.log('on end:', data);
+    req.rawBody = buf;
+    console.log('on end:', buf);
 
     //if opening braces exist
-    if(data && data.indexOf('{') > -1) {
+    if(buf && buf.indexOf('{') > -1) {
       try {
-        req.body = JSON.parse(data);
+        req.body = JSON.parse(buf);
       } catch(e) {
         return res.status(400).send(`Invalid JSON string: ${e.message}`);
       }
