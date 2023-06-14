@@ -1,21 +1,28 @@
 const http = require('http');
 const logger = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
+
+const bodyParser=require('./middleware/bodyParser');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const Router = require('./utils/router');
+
 
 const app = new Router();
 
 // Adding middleware
 app.use(logger);
 
+//jsonparser middleware
+app.use(bodyParser);
+
+// Error handling middleware should be added last
+app.use(errorHandler);
 // Mounting routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// Error handling middleware should be added last
-app.use(errorHandler);
+
 
 // Creating the server
 const server = http.createServer((req, res) => {
