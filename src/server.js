@@ -1,4 +1,5 @@
 const http = require('http');
+const path=require('path')
 const {v4:uuidv4}=require('uuid');
 const logger = require('./middleware/logger');
 // const errorHandler = require('./middleware/errorHandler');
@@ -6,6 +7,7 @@ const errorHandler=require('./middleware/errorHandler');
 
 const bodyParser=require('./middleware/bodyParser');
 const cookieParser=require('./middleware/cookieParser');
+const staticFileMiddleware=require('./middleware/staticFileMiddleware');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const Router = require('./utils/router');
@@ -25,7 +27,7 @@ app.use(bodyParser);
 //cookieparser middleware
 app.use(cookieParser);
 
-// session cookie
+// session cookie. extract it to a middleware module later
 app.use((req, res,next)=>{
     let sessionId=req.cookies.sessionId;
 
@@ -48,6 +50,11 @@ app.use((req, res,next)=>{
     sessions[req.sessionId]=req.session;
     next();
 })
+
+//staticFileMiddleware that serves static files from the public directory
+
+app.use(staticFileMiddleware(path.join(__dirname, 'public')));
+
 app.get('/', (req, res) => {
     console.log('Parsed cookies: ', req.parsedCookies);
     req.session.views=(req.session.views ||0)+1;
@@ -56,6 +63,7 @@ app.get('/', (req, res) => {
 });
 
 // 
+
 
 // Error handling middleware should be added last
 // app.use(errorHandler);
@@ -67,7 +75,10 @@ app.use('/users', usersRouter);
 
 // Creating the server
 const server = http.createServer((req, res) => {
+    
+
     app.handle(req, res, () => {
+
         res.statusCode = 404;
         res.setHeader('Content-Type', 'text/plain');
         res.end('Route not found\n');
