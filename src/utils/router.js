@@ -1,3 +1,4 @@
+const methods = require("methods");
 
 
 class Router {
@@ -16,88 +17,107 @@ class Router {
         this.middleware = [];
     }
 
-    handle(req, res, parentNext) {
-        let i = 0;
+    handle(req,res, parentNext){
+        let i=0;
+        const next=(err)=>{
+            if(err) return parentNext(err);
 
-        const next = (err) => {
-            if (err) return parentNext(err);
-            if (i >= this.middleware.length) {
-                const route = this.match(req);
-                return route ? route.handler(req, res) : parentNext();
+            if(i>=this.middleware.length){
+                const route=this.match(req);
+
+                if(route){
+                    req.params=route.params;
+                    return route.handler(req, res);
+                }else{
+                    return parentNext()
+                }
             }
-            const mw = this.middleware[i++];
+            // move to the next middlware
+            const mw=this.middleware[i++];
             mw.path.test(req.url) && mw.fn(req, res, next);
         };
 
         next();
     }
-    //important use method
-    use(path, fn) {
-      if (typeof path === 'function') {
-          fn = path;
-          path = '/';
-      }
-  
-      if (fn instanceof Router) {
-          const childRouter = fn;
-          fn = (req, res, next) => childRouter.handle(req, res, next);
-      }
-      this.middleware.push({
-          path: this.pathToRegExp(path),
-          fn
-      });
-  }
-    get(path, handler) {
-        this.routes.GET.push({ path: this.pathToRegExp(path), handler });
-    }
 
-    post(path, handler) {
-        this.routes.POST.push({ path: this.pathToRegExp(path), handler });
-    }
+    use(path, fn){
+        if(typeof path==='function'){
+            fn=path;
+            path='/';
+        }
 
-    put(path, handler) {
-        this.routes.PUT.push({ path: this.pathToRegExp(path), handler });
-    }
+        if(fn instanceof Router){
+            const childRouter=fn;
+            fn=(req, res,next)=>childRouter.handle(req, res,next);
 
-    patch(path, handler) {
-        this.routes.PATCH.push({ path: this.pathToRegExp(path), handler });
+        }
+        this.middleware.push({
+            path:this.pathToRegExp(path).regexp,
+            fn
+        });
     }
+        addRoute(method, path, handler){
+            const pathToRegExpResult=this.pathToRegExp(path);
+            this.routes[method].push({
+                ...pathToRegExpResult, handler
+            });
+        }
 
-    delete(path, handler) {
-        this.routes.DELETE.push({ path: this.pathToRegExp(path), handler });
-    }
+        // changed all HTTP verbs
+        get(path, handler){
+            this.addRoute('GET', path, handler)
+        }
 
-    head(path, handler) {
-        this.routes.HEAD.push({ path: this.pathToRegExp(path), handler });
-    }
+        post(path, handler){
+            this.addRoute('POST', path, handler)
+        }
 
-    options(path, handler) {
-        this.routes.OPTIONS.push({ path: this.pathToRegExp(path), handler });
-    }
+        put(path, handler){
+            this.addRoute('PUT', path, handler)
+        }
 
-    connect(path, handler) {
-        this.routes.CONNECT.push({ path: this.pathToRegExp(path), handler });
-    }
+        patch(path, handler){
+            this.addRoute('PATCH', path, handler)
+        }
 
-    trace(path, handler) {
-        this.routes.TRACE.push({ path: this.pathToRegExp(path), handler });
-    }
+        delete(path, handler){
+            this.addRoute('DELETE', path, handler)
+        }
 
-    pathToRegExp(path) {
-        const pathParts=path.split('/').map(part => part.startsWith(':') ? '(\\w+)' : part);
-        return new RegExp(`^${pathParts.join('/')}$`);
-    }
+        pathToRegExp(path){
+            const paramNames=[];
+            const pathParts=path.split('/').map(part=>{
+                if(part.startsWith(":")){
+                    paramNames.push(part.slice(1));
+                    return '(\\w+)';
+                }else{
+                    return part;
+                }
+            });
 
-    match(req) {
-        const methodRoutes = this.routes[req.method];
-        for (const { path, handler } of methodRoutes) {
-            const match = req.url.match(path);
-            if (match) {
-                req.params = match.slice(1); // capture groups are in position 1 and onwards
-                return { handler };
+            return {
+                regexp: new RegExp(`^${pathParts.join('/')}$`),
+                paramNames
+            };
+        }
+
+        match(req){
+            const methodRoutes=this.routes[req.method];
+            for(const route of methodRoutes){
+                const match=req.url.match(route.regexp);
+
+                if(match){
+                    const params=match.slice(1).reduce((params, value, index)=>{
+                        params[route.paramNames[index]]=value;
+                        return params;
+                    }, {});
+                    return {
+                        handler:route.handler, params
+                    };
+                }
             }
         }
     }
-}
+
 
 module.exports = Router;

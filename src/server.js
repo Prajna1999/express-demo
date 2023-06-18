@@ -2,12 +2,11 @@ const http = require('http');
 const path=require('path')
 const {v4:uuidv4}=require('uuid');
 const logger = require('./middleware/logger');
-// const errorHandler = require('./middleware/errorHandler');
-const errorHandler=require('./middleware/errorHandler');
-
+const {errorHandlingMiddleware} = require('./middleware/errorHandlingMiddleware');
 const bodyParser=require('./middleware/bodyParser');
 const cookieParser=require('./middleware/cookieParser');
 const staticFileMiddleware=require('./middleware/staticFileMiddleware');
+const {handleNotFound}=require('./middleware/handleNotFound');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const Router = require('./utils/router');
@@ -61,29 +60,27 @@ app.get('/', (req, res) => {
     res.send('See console for cookies '+`View Number ${req.session.views}`);
     
 });
+ 
 
-// 
-
-
-// Error handling middleware should be added last
-// app.use(errorHandler);
-// Mounting routers
 app.use('/',indexRouter);
 app.use('/users', usersRouter);
 
-
+// error handling middleware
+// app.use(handleNotFound)
+// app.use(errorHandlingMiddleware )
 
 // Creating the server
+// Creating the server
 const server = http.createServer((req, res) => {
-    
-
-    app.handle(req, res, () => {
-
-        res.statusCode = 404;
-        res.setHeader('Content-Type', 'text/plain');
-        res.end('Route not found\n');
+    app.handle(req, res, (err) => {
+        if (err) {
+            errorHandlingMiddleware(err, req, res, () => {});
+        } else {
+            handleNotFound(req, res);
+        }
     });
 });
+
 
 const PORT = process.env.PORT || 3000;
 

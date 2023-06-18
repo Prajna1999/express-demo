@@ -6,8 +6,8 @@ const router=new Router();
 router.get('/', (req, res, next)=>{
     
     res.statusCode=200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Welcome to our mini-express app! \n');
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({message:"Hello from mini-express"}));
    
 })
 
