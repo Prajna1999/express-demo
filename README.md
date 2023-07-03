@@ -88,9 +88,6 @@ We welcome contributions from the community! If you'd like to contribute to Metr
 MetroJS is licensed under the [MIT License](https://github.com/Prajna1999/metrojs/blob/main/LICENSE). You are free to use, modify, and distribute this framework according to the terms of the license.
 
 If you encounter any issues or have suggestions for improvement, please open an issue on the GitHub repository. We appreciate your feedback and contributions to make MetroJS even better.
-```
-
-
 
 
 
