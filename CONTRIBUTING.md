@@ -47,6 +47,7 @@ To contribute to MetroJS, follow these steps:
 10. Participate in the review process by addressing feedback and making necessary changes to your code.
 
 11. Once your contribution is approved, it will be merged into the main MetroJS repository. Congratulations on your successful contribution!
+12. Follow this repo https://github.com/Prajna1999/lets-build-express to know how express is implemented
 
 ## Reporting Issues
 
