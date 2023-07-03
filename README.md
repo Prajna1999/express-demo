@@ -1,58 +1,96 @@
-## Roadmap
 
-1. Research and Planning:
-   - Conduct research on existing web frameworks and libraries, including Express.js, to identify key features and best practices.
-   - Define the scope and objectives of the Mini Express Library.
-   - Identify potential challenges and technical considerations.
-   - Create a high-level architectural overview.
 
-2. Core Functionality:
-   - Implement the basic HTTP server functionality using Node.js HTTP module.
-   - Develop routing capabilities to handle different HTTP methods and URL patterns.
-   - Implement request processing and response generation functionality.
-   - Integrate middleware functionality to process requests and responses.
-   - Implement basic error handling mechanisms.
 
-3. Request and Response Enhancements:
-   - Enhance request object to provide access to headers, URL parameters, query parameters, and request body.
-   - Implement content type parsing and handling for JSON, form data, etc.
-   - Add response manipulation options, including setting status codes, headers, and response data in various formats.
+# MetroJS
 
-4. Static File Serving:
-   - Implement static file serving capabilities to serve CSS, JavaScript, images, etc.
-   - Handle directory index files.
-   - Add support for caching headers and cache control.
+MetroJS is a minimalistic and lightweight web application framework built on top of Node.js. It provides a simple and intuitive API for developing web applications with a focus on modularity and flexibility.
 
-5. Middleware Enhancements:
-   - Implement support for global middleware functions that apply to all requests.
-   - Enable chaining of middleware functions to execute in sequence.
-   - Develop error handling middleware and default error responses for common HTTP errors.
+## Table of Contents
 
-6. Additional Features:
-   - Implement URL encoding and decoding utility functions.
-   - Add cookie management functionality for reading and writing cookies.
-   - Enable serving applications over HTTPS with SSL/TLS certificate management.
-   - Implement WebSocket support for handling WebSocket connections and events.
-   - Integrate with popular template engines for dynamic HTML content generation.
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+- [Documentation](#documentation)
+- [Cloning the Repository](#cloning-the-repository)
+- [Contributing](#contributing)
+- [License](#license)
 
-7. Compatibility and Integration:
-   - Ensure compatibility with existing Node.js applications and modules.
-   - Test integration with other libraries and frameworks, such as Express.js.
-   - Address any compatibility issues and provide documentation for integration.
+## Introduction
 
-8. Documentation and Examples:
-   - Create comprehensive documentation, including API reference, guides, and code samples.
-   - Document installation instructions and library usage.
-   - Provide examples demonstrating the usage of different features and functionalities.
+MetroJS is a minimalistic and lightweight web application framework built on top of Node.js. It provides a simple and intuitive API for developing web applications with a focus on modularity and flexibility. Whether you are building a small personal project or a large-scale production application, MetroJS can help you create robust and efficient web applications.
 
-9. Testing and Quality Assurance:
-   - Develop a suite of automated tests to cover different use cases and edge cases.
-   - Perform unit testing, integration testing, and regression testing.
-   - Conduct performance testing to ensure efficient handling of requests.
-   - Fix bugs and optimize the library based on testing results.
+## Installation
 
-10. Release and Maintenance:
-    - Package the Mini Express Library for distribution (e.g., as an NPM package).
-    - Publish the library and make it available for developers to use.
-    - Monitor community feedback and address any issues or feature requests.
-    - Provide regular updates and bug fixes to maintain the library's stability and compatibility.
+To use MetroJS in your project, you need to have Node.js and npm (Node Package Manager) installed. If you haven't installed Node.js, you can download it from the official website: [https://nodejs.org](https://nodejs.org).
+
+
+
+Once you have Node.js and npm installed, you can install MetroJS by running the following command in your project directory:
+
+```bash
+$ npm install metrojs
+```
+
+This will download and install MetroJS and its dependencies into your project's `node_modules` directory.
+
+### Note
+The package is in the process of being uploaded to the npm registry. We are working on making it live soon. Until then use the git clone command to use the framework.
+
+## Basic Usage
+
+To create a basic MetroJS application, you need to require the `metrojs` module and initialize an instance of `metro()`.
+
+```javascript
+const metro = require('metrojs');
+const app = metro();
+```
+
+Once you have an instance of `app`, you can start defining routes and handling requests using the available HTTP methods such as `get()`, `post()`, `put()`, `delete()`, etc.
+
+Here's an example that demonstrates how to create a simple "Hello, MetroJS!" route:
+
+```javascript
+app.get('/', (req, res) => {
+  res.send('Hello, MetroJS!');
+});
+```
+
+You can start the MetroJS server by calling the `listen()` method and specifying the port number:
+
+```javascript
+app.listen(3000, () => {
+  console.log('MetroJS server listening on port 3000');
+});
+```
+
+Now, when you run your application with Node.js, it will start a server that listens on port 3000. Open your browser and visit `http://localhost:3000` to see the "Hello, MetroJS!" message.
+
+## Documentation
+
+For detailed documentation on how to use MetroJS and its features, please refer to the [MetroJS Documentation](https://yourdocumentationurl.com). The documentation provides comprehensive guides, examples, and reference material to help you understand and utilize the full power of MetroJS.
+
+## Cloning the Repository
+
+To clone the MetroJS repository from GitHub, you can use the following command:
+
+```bash
+$ git clone https://github.com/Prajna1999/metrojs.git
+```
+
+
+
+## Contributing
+
+We welcome contributions from the community! If you'd like to contribute to MetroJS, please follow the guidelines in [CONTRIBUTING.md](https://github.com/Prajna1999/metrojs/blob/main/CONTRIBUTING.md). The contribution guide provides instructions on how to set up the development environment, run tests, and submit pull requests.
+
+## License
+
+MetroJS is licensed under the [MIT License](https://github.com/Prajna1999/metrojs/blob/main/LICENSE). You are free to use, modify, and distribute this framework according to the terms of the license.
+
+If you encounter any issues or have suggestions for improvement, please open an issue on the GitHub repository. We appreciate your feedback and contributions to make MetroJS even better.
+```
+
+
+
+
+
